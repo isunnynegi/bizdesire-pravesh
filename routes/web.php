@@ -33,10 +33,10 @@ Route::middleware('guest:admin')->group(function(){
 });
 
 Route::middleware('auth:admin')->name('admin.')->group(function(){
-    Route::post('/admin-logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
-    Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin-logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    
+    /** Product crud operation */
     Route::get('/admin-product', [ProductController::class, 'index'])->name('product_index');
     Route::get('/admin-product/create', [ProductController::class, 'create'])->name('product_create');
     Route::post('/admin-product/create', [ProductController::class, 'store'])->name('product_store');

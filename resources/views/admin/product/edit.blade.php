@@ -1,52 +1,63 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                  {{ __('Edit Post') }}
+<x-admin-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Edit '.$product->name) }}
+        </h2>
+    </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="flex items-center justify-end mt-4">
+                  <a href="{{ route('admin.product_index') }}">Back</a>
                 </div>
-
-                <div class="card-body">
-                  <form method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="form-group">
-                      <label for="formGroupTitle">Title</label>
-                      <input type="text" class="form-control" name="title" id="formGroupTitle" placeholder="Blog Title" value="{{ $blog->title }}">
-                      @if ($errors->has('title'))
-                        <span class="text-danger">{{ $errors->first('title') }}</span>
-                      @endif
+                <form method="POST" action="{{route('admin.product_update',['id'=>$product->id])}}">
+                  @csrf
+                  @method('PUT')
+                  <div class="form-group">
+                    <label for="formGroupName">Name</label>
+                    <input type="text" class="form-control name" name="name" id="formGroupName"  placeholder="Name" value="{{$product->name}}">
+                    @if ($errors->has('name'))
+                      <span class="text-danger">{{ $errors->first('name') }}</span>
+                    @endif
+                  </div>
+                  <div class="form-group mt-2">
+                    <label for="formGroupSku">Sku</label>
+                    <input type="text" class="form-control" name="sku" id="formGroupSku" placeholder="SKU" value="{{$product->sku}}">
+                    @if ($errors->has('sku'))
+                      <span class="text-danger">{{ $errors->first('sku') }}</span>
+                    @endif
+                  </div>
+                  <div class="form-group mt-2">
+                    <label for="formGroupPrice">Price</label>
+                    <input type="number" step="0.01" min="0" class="form-control" name="price" id="formGroupPrice" placeholder="Price" value="{{$product->price}}">
+                    @if ($errors->has('price'))
+                      <span class="text-danger">{{ $errors->first('price') }}</span>
+                    @endif
+                  </div>
+                  <div class="form-group mt-2">
+                    <label for="exampleFormDescription">Description</label>
+                    <textarea class="form-control" id="exampleFormDescription" name="description" rows="5" placeholder="Description">{{$product->description}}</textarea>
+                    @if ($errors->has('description'))
+                      <span class="text-danger">{{ $errors->first('description') }}</span>
+                    @endif
+                  </div>
+                  <div class="form-group mt-2">
+                    <label for="formGroupFullfillable">Is Fullfillable?</label>
+                    <input type="checkbox" class="form-control" name="is_fullfillable" id="formGroupFullfillable" value="1" {{$product->is_fullfillable == 1 ? "checked" : ""}}>
+                    @if ($errors->has('is_fullfillable'))
+                      <span class="text-danger">{{ $errors->first('is_fullfillable') }}</span>
+                    @endif
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <button type="reset" class="btn btn-primary mt-4">Reset</button>
                     </div>
-                    <div class="form-group mt-2">
-                      <label for="formGroupAuthor">Author</label>
-                      <input type="text" class="form-control" name="author" id="formGroupAuthor"  placeholder="Author Name" value="{{ $blog->author }}">
-                      @if ($errors->has('author'))
-                        <span class="text-danger">{{ $errors->first('author') }}</span>
-                      @endif
+                    <div>
+                      <button type="submit" class="btn btn-primary mt-4">Update</button>
                     </div>
-                    <div class="form-group mt-2">
-                      <label for="exampleFormContent">Content</label>
-                      <textarea class="form-control" id="exampleFormContent" name="content" rows="5" placeholder="Blog Content">{{ $blog->content }}</textarea>
-                      @if ($errors->has('content'))
-                        <span class="text-danger">{{ $errors->first('content') }}</span>
-                      @endif
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <button type="submit" class="btn btn-primary mt-4">Update</button>
-                      </div>
-                      <div>
-                        <a type="submit" class="btn btn-link mt-4" href="{{ url('/') }}">back to home</a>
-                      </div>
-                    </div>
-
-                  </form>
-                </div>
+                  </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-@endsection
+</x-admin-layout>
