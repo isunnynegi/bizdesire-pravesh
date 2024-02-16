@@ -16,4 +16,8 @@ class Cart extends Model
         'disount',
         'total'
     ];
+
+    function cartItems(){
+        return $this->hasMany(CartDetail::class, 'cart_id');
+    }
 }

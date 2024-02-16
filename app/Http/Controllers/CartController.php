@@ -9,6 +9,11 @@ use DB;
 
 class CartController extends Controller
 {
+    function index(){
+        $cartData = $this->getUserCartDetail();
+        return view('cart.index', compact('cartData'));
+    }
+
     function addtocart(Request $request, string $id ){
         try {
             if(isset($id) && !empty($id)){
@@ -53,6 +58,17 @@ class CartController extends Controller
             $message = $e->getMessage();
             return redirect()->back()->with('error',$message);
         }
+    }
+
+    private function getUserCartDetail(){
+        $userId = Auth::user()->id;
+
+        $cart = Cart::with('cartItems.product')->where([
+            'user_id' => $userId,
+        ])->first();
+        
+        return $cart;
+
     }
 
     private function getUserCart(){

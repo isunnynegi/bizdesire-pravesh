@@ -18,10 +18,14 @@ use App\Http\Controllers\Admin\{AuthenticatedSessionController, DashboardControl
 Route::get('/', [HomeController::class, 'index'])->name('landing');
 
 Route::middleware('auth')->group(function () {
+    /** Profile */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    /** Cart */
     Route::get('/add-to-cart/{id}', [CartController::class, 'addtocart'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 });
 
