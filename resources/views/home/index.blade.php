@@ -9,9 +9,9 @@
                 <p class="mt-4">{{ $product->description }}</p>
                 <p class="mt-4 text-gray-700">Price: ${{ $product->price }}</p>
 
-                <button class="mt-4 bg-blue-500 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded">
+                <a class="mt-4 bg-blue-500 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded" href="{{route('cart.add',['id'=>$product->id])}}">
                     Add to Cart
-                </button>
+                </a>
             </div>
         </div>
     @endforeach

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{ProfileController, HomeController};
+use App\Http\Controllers\{ProfileController, HomeController, CartController};
 use App\Http\Controllers\Admin\{AuthenticatedSessionController, DashboardController, ProductController};
 
 /*
@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/add-to-cart/{id}', [CartController::class, 'addtocart'])->name('cart.add');
+
 });
 
 require __DIR__.'/auth.php';
