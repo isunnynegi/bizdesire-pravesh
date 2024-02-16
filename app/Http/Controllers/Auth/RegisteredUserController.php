@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -40,7 +41,17 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'refer_code' => Str::random(6)
         ]);
+
+        if ($request->has('refer_code')) {
+            $referralUser = User::where("refer_code",$request->input('refer_code'))->first();
+            if ($referralUser) {
+                $user->referrer()->associate($referralUser);
+                // dd($user);
+                $user->save();
+            }
+        }
 
         event(new Registered($user));
 

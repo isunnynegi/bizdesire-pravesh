@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'refer_code',
     ];
 
     /**
@@ -42,4 +43,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function referralLink(){
+        return route('register', ['ref' => $this->refer_code]);
+    }
+
+    public function referrer(){
+        return $this->belongsTo(User::class, 'referral_id');
+    }
+
+    public function referrals(){
+        return $this->hasMany(User::class, 'referral_id');
+    }
 }
