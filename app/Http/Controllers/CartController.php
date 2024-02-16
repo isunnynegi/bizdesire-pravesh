@@ -15,14 +15,13 @@ class CartController extends Controller
     }
 
     function addtocart(Request $request, string $id ){
+        DB::beginTransaction();
         try {
             if(isset($id) && !empty($id)){
                 /**
                  * check product exists or not
                  */
                 $product = Product::findOrFail($id);
-
-                DB::beginTransaction();
                 if($product){
                     /** 
                      * Create Or Get Cart Instance for loggedin User
@@ -57,6 +56,26 @@ class CartController extends Controller
             DB::rollBack();
             $message = $e->getMessage();
             return redirect()->back()->with('error',$message);
+        }
+    }
+
+    function update(Request $request, $action, $itemId){
+        DB::beginTransaction();
+        try {
+            $cart = $this->getUserCart();
+
+            $this->addUpdateCartItemQty($cart->id, $itemId, $action);
+
+            $this->getCartProductTotal($cart->id);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Item Update.');
+
+        } catch(\Exception $e){
+            DB::rollBack();
+            $message = $e->getMessage();
+            return redirect()->back()->with('error', $message);
+
         }
     }
 
@@ -119,5 +138,31 @@ class CartController extends Controller
         $cart->subtotal = $productstotal;
         $cart->total = $productstotal;
         $cart->save();
+    }
+
+
+    private function addUpdateCartItemQty($cartId, $itemId, $action){
+        
+
+        $cartDetail = CartDetail::where([
+            'id' => $itemId,
+            'cart_id' => $cartId
+        ])->first();
+
+        if($cartDetail->exists()){
+            if(strtolower($action) == "up"){
+                $cartDetail->qty = $cartDetail->qty + 1;
+            } else {
+                $cartDetail->qty = $cartDetail->qty - 1;
+            }
+            if($cartDetail->qty > 0){
+                $cartDetail->save();
+            } else {
+                $cartDetail->delete();
+            }
+
+        } else {
+            throw new Exception("Item Not Found", 422);
+        }
     }
 }

@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     /** Cart */
     Route::get('/add-to-cart/{id}', [CartController::class, 'addtocart'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart/updateitem/{action}/{itemid}', [CartController::class, 'update'])->name('cart.itemupdate');
 
 });
 
