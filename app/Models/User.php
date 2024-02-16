@@ -55,4 +55,16 @@ class User extends Authenticatable
     public function referrals(){
         return $this->hasMany(User::class, 'referral_id');
     }
+
+    public function getAncestors($depth = 5){
+        $ancestors = collect([$this]);
+
+        for ($i = 1; $i <= $depth; $i++) {
+            $ancestors = $ancestors->flatMap(function ($user) {
+                return $user->referrer ? [$user->referrer] : [];
+            });
+        }
+
+        return $ancestors;
+    }
 }
