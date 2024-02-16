@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     function index(){
         $cartData = $this->getUserCartDetail();
-        return view('cart.index', compact('cartData'));
+        return view('cart.index', ['cartData'=>$cartData]);
     }
 
     function addtocart(Request $request, string $id ){
